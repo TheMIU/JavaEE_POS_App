@@ -8,7 +8,7 @@ function getAllCustomers() {
     $("#tblCustomer").empty();
 
     $.ajax({
-        url: 'customer',
+        url: 'http://localhost:8080/app/pages/customer',
         dataType: "json",
         method: "GET",
         success: function (customers) {
@@ -32,7 +32,7 @@ $("#btnCustomer").click(function () {
     let formData = $("#customerForm").serialize();
 
     $.ajax({
-        url: "customer",
+        url: "http://localhost:8080/app/pages/customer",
         method: "POST",
         data: formData,
         success: function (res) {
@@ -50,7 +50,7 @@ $("#btnCusDelete").click(function () {
     let id = $('#txtCustomerID').val();
 
     $.ajax({
-        url: 'customer?cusID=' + id,
+        url: 'http://localhost:8080/app/pages/customer?cusID=' + id,
         method: 'DELETE',
 
         success: function (res) {
@@ -76,7 +76,7 @@ $("#btnUpdate").click(function () {
     }
 
     $.ajax({
-        url: 'customer',
+        url: 'http://localhost:8080/app/pages/customer',
         method: 'PUT',
         contentType: "application/json",
         data: JSON.stringify(customer),

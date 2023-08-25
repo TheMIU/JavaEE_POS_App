@@ -3,7 +3,6 @@ package lk.ijse.jsp.servlet;
 import lk.ijse.jsp.servlet.util.DBConnection;
 
 import javax.json.*;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +16,8 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
+            resp.addHeader("Access-Control-Allow-Origin", "*");
+
             Connection connection = DBConnection.getDBConnection().getConnection();
             PreparedStatement pstm = connection.prepareStatement("select * from customer");
             ResultSet rst = pstm.executeQuery();
@@ -47,12 +48,13 @@ public class CustomerServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String cusID = req.getParameter("cusID");
         String cusName = req.getParameter("cusName");
         String cusAddress = req.getParameter("cusAddress");
 
         resp.addHeader("Content-Type", "application/json");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
         try {
             Connection connection = DBConnection.getDBConnection().getConnection();
             PreparedStatement pstm = connection.prepareStatement("insert into customer values(?,?,?)");
@@ -89,7 +91,7 @@ public class CustomerServlet extends HttpServlet {
         String cusAddress = jsonObject.getString("cusAddress");
 
         resp.addHeader("Content-Type", "application/json");
-
+        resp.addHeader("Access-Control-Allow-Origin", "*");
         try {
             Connection connection = DBConnection.getDBConnection().getConnection();
             PreparedStatement pstm3 = connection.prepareStatement("update customer set cusName=?,cusAddress=? where cusID=?");
@@ -117,9 +119,10 @@ public class CustomerServlet extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String cusID = req.getParameter("cusID");
         resp.addHeader("Content-type", "application/json");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
 
         try {
             Connection connection = DBConnection.getDBConnection().getConnection();
@@ -150,6 +153,14 @@ public class CustomerServlet extends HttpServlet {
         response.add("message", message);
         response.add("data", data);
         resp.getWriter().print(response.build());
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) {
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.addHeader("Access-Control-Allow-Methods", "PUT");
+        resp.addHeader("Access-Control-Allow-Methods", "DELETE");
+        resp.addHeader("Access-Control-Allow-Headers", "Content-type");
     }
 }
 

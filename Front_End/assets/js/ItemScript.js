@@ -8,7 +8,7 @@ function getAllItems() {
     $("#tblItem").empty();
 
     $.ajax({
-        url: 'item',
+        url: 'http://localhost:8080/app/pages/item',
         dataType: "json",
         method: "GET",
         success: function (items) {
@@ -33,7 +33,7 @@ $("#btnItem").click(function () {
     let formData = $("#itemForm").serialize();
 
     $.ajax({
-        url: "item",
+        url: "http://localhost:8080/app/pages/item",
         method: "POST",
         data: formData,
         success: function (res) {
@@ -51,7 +51,7 @@ $("#btnItemDelete").click(function () {
     let code = $('#itemCode').val();
 
     $.ajax({
-        url: "item?code=" + code,
+        url: "http://localhost:8080/app/pages/item?code=" + code,
         method: "DELETE",
 
         success: function (res) {
@@ -79,7 +79,7 @@ $("#btnItemUpdate").click(function () {
     }
 
     $.ajax({
-        url: "item",
+        url: "http://localhost:8080/app/pages/item",
         method: "PUT",
         contentType: "application/json",
         data: JSON.stringify(item),

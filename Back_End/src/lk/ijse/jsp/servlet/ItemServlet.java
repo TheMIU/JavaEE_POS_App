@@ -3,7 +3,6 @@ package lk.ijse.jsp.servlet;
 import lk.ijse.jsp.servlet.util.DBConnection;
 
 import javax.json.*;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +14,10 @@ import java.sql.*;
 public class ItemServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
+            resp.addHeader("Access-Control-Allow-Origin", "*");
+
             Connection connection = DBConnection.getDBConnection().getConnection();
             PreparedStatement pstm = connection.prepareStatement("select * from Item");
             ResultSet rst = pstm.executeQuery();
@@ -49,13 +50,14 @@ public class ItemServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String code = req.getParameter("code");
         String itemName = req.getParameter("description");
         String qty = req.getParameter("qty");
         String unitPrice = req.getParameter("unitPrice");
 
         resp.addHeader("Content-Type", "application/json");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
         try {
             Connection connection = DBConnection.getDBConnection().getConnection();
             PreparedStatement pstm = connection.prepareStatement("insert into Item values(?,?,?,?)");
@@ -84,7 +86,7 @@ public class ItemServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         JsonReader reader = Json.createReader(req.getReader());
         JsonObject jsonObject = reader.readObject();
 
@@ -94,6 +96,7 @@ public class ItemServlet extends HttpServlet {
         String unitPrice = jsonObject.getString("unitPrice");
 
         resp.addHeader("Content-Type", "application/json");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
         try {
             Connection connection = DBConnection.getDBConnection().getConnection();
             PreparedStatement pstm3 = connection.prepareStatement("update Item set itemName=?,qty=?,unitPrice=? where code=?");
@@ -122,9 +125,10 @@ public class ItemServlet extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String code = req.getParameter("code");
         resp.addHeader("Content-type", "application/json");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
 
         try{
             Connection connection = DBConnection.getDBConnection().getConnection();
@@ -155,5 +159,13 @@ public class ItemServlet extends HttpServlet {
         response.add("message", message);
         response.add("data", data);
         resp.getWriter().print(response.build());
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) {
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.addHeader("Access-Control-Allow-Methods", "PUT");
+        resp.addHeader("Access-Control-Allow-Methods", "DELETE");
+        resp.addHeader("Access-Control-Allow-Headers", "Content-type");
     }
 }
