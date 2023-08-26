@@ -1,4 +1,5 @@
 getAllCustomers();
+bindRowClickEvents();
 
 $("#btnGetAll").click(function () {
     getAllCustomers();
@@ -24,6 +25,19 @@ function getAllCustomers() {
         error: function (error) {
             alert(error.responseJSON.message);
         }
+    });
+}
+
+// bind table row values to text field on click
+function bindRowClickEvents() {
+    $('#tblCustomer').on('click', 'tr', function () {
+        let id = $(this).find('td:eq(0)').text();
+        let name = $(this).find('td:eq(1)').text();
+        let address = $(this).find('td:eq(2)').text();
+
+        $('#txtCustomerID').val(id);
+        $('#txtCustomerName').val(name);
+        $('#txtCustomerAddress').val(address);
     });
 }
 
