@@ -22,9 +22,11 @@ function getAllItems() {
                 let row = `<tr><td>${code}</td><td>${name}</td><td>${qtyOnHand}</td><td>${unitPrice}</td></tr>`;
                 $("#tblItem").append(row);
             }
+            setTextFields("","","","");
         },
         error: function (error) {
             alert(error.responseJSON.message);
+            setTextFields("","","","");
         }
     });
 }
@@ -37,12 +39,21 @@ function bindRowClickEvents() {
         let qtyOnHand = $(this).find('td:eq(2)').text();
         let unitPrice = $(this).find('td:eq(2)').text();
 
-        $('#itemCode').val(code);
-        $('#itemName').val(name);
-        $('#itemQty').val(qtyOnHand);
-        $('#itemPrice').val(unitPrice);
+        setTextFields(code,name,qtyOnHand,unitPrice);
     });
 }
+
+// set text fields
+function setTextFields(code,name,qtyOnHand,unitPrice) {
+    $('#itemCode').val(code);
+    $('#itemName').val(name);
+    $('#itemQty').val(qtyOnHand);
+    $('#itemPrice').val(unitPrice);
+}
+
+$("#btnClear").click(function () {
+    setTextFields("","","","");
+});
 
 // add
 $("#btnItem").click(function () {
