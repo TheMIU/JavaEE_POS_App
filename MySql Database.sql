@@ -3,10 +3,10 @@ create database if not exists testdb;
 create table if not exists customer
 (
     cusID varchar(10) not null
-        primary key,
+    primary key,
     cusName varchar(50) null,
     cusAddress varchar(100) null
-);
+    );
 
 INSERT INTO customer (cusID, cusName, cusAddress)
 VALUES
@@ -19,11 +19,11 @@ VALUES
 create table if not exists item
 (
     code varchar(10) not null
-        primary key,
+    primary key,
     itemName varchar(50) null,
     qty int null,
     unitPrice decimal(10,2) null
-);
+    );
 
 INSERT INTO item (code, itemName, qty, unitPrice)
 VALUES
@@ -37,14 +37,14 @@ VALUES
 CREATE TABLE orders (
                         orderID VARCHAR(10) PRIMARY KEY,
                         date DATE,
-                        customerID INT,
+                        customerID VARCHAR(10),
                         discount INT,
                         total DECIMAL(10, 2)
 );
 
 CREATE TABLE order_items (
                              orderID VARCHAR(10),
-                             itemID INT,
+                             itemID VARCHAR(10),
                              qty INT,
                              PRIMARY KEY (orderID, itemID)
 );
@@ -63,3 +63,8 @@ VALUES
     ('O00-002', 2, 1),
     ('O00-002', 1, 1);
 
+
+insert into orders (orderID, "date", customerID, discount, total)
+values ();
+insert into order_items (orderID, itemID, qty)
+values ();

@@ -62,6 +62,8 @@ function getOrderDB() {
 generateOrderID(getLastOrderID());
 
 function getLastOrderID() {
+    getOrderDB();
+
     if (orderDB.length > 0) {
         return orderDB[orderDB.length - 1].orderID;
     } else {
@@ -349,16 +351,16 @@ function updateGrandTotal() {
 
 ///////////////////////////////////////////
 // place order
-$('#placeOrder').click(function() {
-    if(checkIsValidOrder()){
+$('#placeOrder').click(function () {
+    if (checkIsValidOrder()) {
         placeOrder();
-        changeTextFieldColorsToBack( [$('#txtCash'),$('#txtQty')]);
-    }else{
+        changeTextFieldColorsToBack([$('#txtCash'), $('#txtQty')]);
+    } else {
         alert("Invalid Order!");
     }
 });
 
-function placeOrder(){
+function placeOrder() {
     // Retrieve values from input fields
     let orderID = $('#txtOrderID').val();
     let date = $('#txtDate').val();
@@ -369,7 +371,7 @@ function placeOrder(){
     // Create the cart array
     let cart2 = [];
     // Iterate over the selected items in the table and add them to the cart
-    $('#cart tr').each(function() {
+    $('#cart tr').each(function () {
         let itemCode = $(this).find('td:first-child').text();
         let quantity = parseInt($(this).find('td:nth-child(4)').text());
         let item = itemDB.find(item => item.code === itemCode);
@@ -386,25 +388,42 @@ function placeOrder(){
 
     // Create the new order object
     let order = {
-        orderID: orderID,
-        date: date,
-        customer: customer,
-        cart: cart2,
-        discount: discount,
-        total: total
+        'orderID': orderID,
+        'date': date.toString(),
+        'customer': customer,
+        'cart': cart2,
+        'discount': discount.toString(),
+        'total': total.toString()
     };
 
-    // Push the order object into the orderDB array
-    orderDB.push(order);
-    //console.log(orderDB);
+    console.log(order)
 
-    alert("Order successfully placed!")
+    // send order object to save in server
+    $.ajax({
+        url: 'http://localhost:8080/app/pages/purchase-order',
+        method: 'POST',
+        contentType: "application/json",
+        data: JSON.stringify(order),
+        async:false,
+
+        success: function (res) {
+            alert(res.message);
+        },
+        error: function (error) {
+            alert(error.responseJSON.message);
+        }
+    });
+
+    // Push the order object into the orderDB array
+    //  orderDB.push(order);
+    //console.log(orderDB);
+    //alert("Order successfully placed!")
 
     clearPlaceOrderFields();
 
     // empty cart
     cart2 = [];
-    cart =[];
+    cart = [];
 }
 
 function clearPlaceOrderFields() {
