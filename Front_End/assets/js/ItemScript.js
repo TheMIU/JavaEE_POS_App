@@ -1,3 +1,5 @@
+let baseUrl = 'http://localhost:8080/app/pages/';
+
 getAllItems();
 bindRowClickEvents()
 
@@ -9,7 +11,7 @@ function getAllItems() {
     $("#tblItem").empty();
 
     $.ajax({
-        url: 'http://localhost:8080/app/pages/item',
+        url: baseUrl + 'item',
         dataType: "json",
         method: "GET",
         success: function (items) {
@@ -22,11 +24,11 @@ function getAllItems() {
                 let row = `<tr><td>${code}</td><td>${name}</td><td>${qtyOnHand}</td><td>${unitPrice}</td></tr>`;
                 $("#tblItem").append(row);
             }
-            setTextFields("","","","");
+            setTextFields("", "", "", "");
         },
         error: function (error) {
             alert(error.responseJSON.message);
-            setTextFields("","","","");
+            setTextFields("", "", "", "");
         }
     });
 }
@@ -39,12 +41,12 @@ function bindRowClickEvents() {
         let qtyOnHand = $(this).find('td:eq(2)').text();
         let unitPrice = $(this).find('td:eq(2)').text();
 
-        setTextFields(code,name,qtyOnHand,unitPrice);
+        setTextFields(code, name, qtyOnHand, unitPrice);
     });
 }
 
 // set text fields
-function setTextFields(code,name,qtyOnHand,unitPrice) {
+function setTextFields(code, name, qtyOnHand, unitPrice) {
     $('#itemCode').val(code);
     $('#itemName').val(name);
     $('#itemQty').val(qtyOnHand);
@@ -52,7 +54,7 @@ function setTextFields(code,name,qtyOnHand,unitPrice) {
 }
 
 $("#btnClear").click(function () {
-    setTextFields("","","","");
+    setTextFields("", "", "", "");
 });
 
 // add
@@ -60,7 +62,7 @@ $("#btnItem").click(function () {
     let formData = $("#itemForm").serialize();
 
     $.ajax({
-        url: "http://localhost:8080/app/pages/item",
+        url: baseUrl + "item",
         method: "POST",
         data: formData,
         success: function (res) {
@@ -78,7 +80,7 @@ $("#btnItemDelete").click(function () {
     let code = $('#itemCode').val();
 
     $.ajax({
-        url: "http://localhost:8080/app/pages/item?code=" + code,
+        url: baseUrl + "item?code=" + code,
         method: "DELETE",
 
         success: function (res) {
@@ -106,7 +108,7 @@ $("#btnItemUpdate").click(function () {
     }
 
     $.ajax({
-        url: "http://localhost:8080/app/pages/item",
+        url: baseUrl + "item",
         method: "PUT",
         contentType: "application/json",
         data: JSON.stringify(item),

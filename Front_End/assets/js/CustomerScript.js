@@ -1,3 +1,5 @@
+let baseUrl = 'http://localhost:8080/app/pages/';
+
 getAllCustomers();
 bindRowClickEvents();
 
@@ -9,7 +11,7 @@ function getAllCustomers() {
     $("#tblCustomer").empty();
 
     $.ajax({
-        url: 'http://localhost:8080/app/pages/customer',
+        url: baseUrl + 'customer',
         dataType: "json",
         method: "GET",
         success: function (customers) {
@@ -21,11 +23,11 @@ function getAllCustomers() {
                 let row = `<tr><td>${id}</td><td>${name}</td><td>${address}</td></tr>`;
                 $("#tblCustomer").append(row);
             }
-            setTextFields("","","");
+            setTextFields("", "", "");
         },
         error: function (error) {
             alert(error.responseJSON.message);
-            setTextFields("","","");
+            setTextFields("", "", "");
         }
     });
 }
@@ -37,19 +39,19 @@ function bindRowClickEvents() {
         let name = $(this).find('td:eq(1)').text();
         let address = $(this).find('td:eq(2)').text();
 
-        setTextFields(id,name,address);
+        setTextFields(id, name, address);
     });
 }
 
 // set text fields
-function setTextFields(id,name,address) {
+function setTextFields(id, name, address) {
     $('#txtCustomerID').val(id);
     $('#txtCustomerName').val(name);
     $('#txtCustomerAddress').val(address);
 }
 
 $("#btnClear").click(function () {
-    setTextFields("","","");
+    setTextFields("", "", "");
 });
 
 // add
@@ -57,7 +59,7 @@ $("#btnCustomer").click(function () {
     let formData = $("#customerForm").serialize();
 
     $.ajax({
-        url: "http://localhost:8080/app/pages/customer",
+        url: baseUrl + 'customer',
         method: "POST",
         data: formData,
         success: function (res) {
@@ -75,7 +77,7 @@ $("#btnCusDelete").click(function () {
     let id = $('#txtCustomerID').val();
 
     $.ajax({
-        url: 'http://localhost:8080/app/pages/customer?cusID=' + id,
+        url: baseUrl + 'customer?cusID='+ id,
         method: 'DELETE',
 
         success: function (res) {
@@ -101,7 +103,7 @@ $("#btnUpdate").click(function () {
     }
 
     $.ajax({
-        url: 'http://localhost:8080/app/pages/customer',
+        url: baseUrl + 'customer',
         method: 'PUT',
         contentType: "application/json",
         data: JSON.stringify(customer),
@@ -115,3 +117,4 @@ $("#btnUpdate").click(function () {
         }
     });
 });
+
