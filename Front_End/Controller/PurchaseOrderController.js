@@ -1,3 +1,63 @@
+var customerDB;
+var itemDB;
+var orderDB;
+
+getCustomerDB();
+getItemDB();
+getOrderDB();
+
+// get customer json data from CustomerServletAPI
+function getCustomerDB() {
+    $.ajax({
+        url: 'http://localhost:8080/app/pages/customer',
+        dataType: "json",
+        method: "GET",
+        async: false,
+        success: function (customers) {
+            customerDB = customers;
+            console.log(customerDB)
+
+        },
+        error: function (error) {
+            alert('Error loading customers');
+        }
+    });
+}
+
+function getItemDB() {
+    $.ajax({
+        url: 'http://localhost:8080/app/pages/item',
+        dataType: "json",
+        method: "GET",
+        async: false,
+        success: function (items) {
+            itemDB = items;
+            console.log(itemDB)
+        },
+        error: function (error) {
+            alert('Error loading Items');
+        }
+    });
+}
+
+function getOrderDB() {
+    $.ajax({
+        url: 'http://localhost:8080/app/pages/orders',
+        dataType: "json",
+        method: "GET",
+        async: false,
+        success: function (orders) {
+            orderDB = orders;
+            console.log(orderDB)
+        },
+        error: function (error) {
+            alert('Error loading Orders');
+        }
+    });
+}
+
+////////////////////////////////////
+
 //generate the next order ID
 generateOrderID(getLastOrderID());
 
@@ -48,13 +108,13 @@ function loadAllCusIDs() {
         selectCusElement.removeChild(selectCusElement.firstChild);
     }
 
-    // Add data from the customerDB array
     customerDB.forEach(function (customer) {
         var optionElement = document.createElement("option");
         optionElement.value = customer.id;
         optionElement.textContent = customer.id;
         selectCusElement.appendChild(optionElement);
     });
+
     $('#selectCusID').val('');
 }
 
@@ -109,7 +169,7 @@ selectCodeElement.addEventListener("change", function () {
     if (selectedItem) {
         $('#txtItemName').val(selectedItem.itemName);
         $('#txtItemPrice').val(selectedItem.unitPrice);
-        $('#txtQTYOnHand').val(selectedItem.qtyOnHand);
+        $('#txtQTYOnHand').val(selectedItem.qty);
 
     } else {
         $('#txtItemName').val("");
