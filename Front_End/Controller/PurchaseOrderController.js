@@ -414,11 +414,6 @@ function placeOrder() {
         }
     });
 
-    // Push the order object into the orderDB array
-    //  orderDB.push(order);
-    //console.log(orderDB);
-    //alert("Order successfully placed!")
-
     clearPlaceOrderFields();
 
     // empty cart

@@ -56,12 +56,6 @@ public class PurchaseOrderServletAPI extends HttpServlet {
             Connection connection = DBConnection.getDBConnection().getConnection();
             connection.setAutoCommit(false);
 
-            PreparedStatement pstm = connection.prepareStatement("insert into order_items (orderID, itemID, qty)\n" +
-                    "values (?,?,?);");
-            pstm.setObject(1, orderID);
-            pstm.setObject(2, itemCode);
-            pstm.setObject(3, String.valueOf(qty));
-
             PreparedStatement pstm2 = connection.prepareStatement("insert into orders (orderID, date, customerID, discount, total)\n" +
                     "values (?,?,?,?,?);");
             pstm2.setObject(1, orderID);
@@ -70,7 +64,24 @@ public class PurchaseOrderServletAPI extends HttpServlet {
             pstm2.setObject(4, discount);
             pstm2.setObject(5, total);
 
-            if (pstm.executeUpdate() > 0 && pstm2.executeUpdate() > 0) {
+            if (pstm2.executeUpdate() > 0) {
+                // Insert items from the cart
+                for (JsonValue cartItemValue : cart) {
+                    JsonObject cartItem = (JsonObject) cartItemValue;
+                    JsonObject item = cartItem.getJsonObject("item");
+
+                    itemCode = item.getString("code");
+                    qty = item.getInt("qty");
+
+                    PreparedStatement pstm = connection.prepareStatement("insert into order_items (orderID, itemID, qty)\n" +
+                            "values (?,?,?);");
+                    pstm.setObject(1, orderID);
+                    pstm.setObject(2, itemCode);
+                    pstm.setObject(3, String.valueOf(qty));
+
+                    pstm.executeUpdate();
+                }
+
                 connection.commit();
                 showMessage(resp, orderID + " Order Successfully Added..!", "ok", "[]");
                 resp.setStatus(200);

@@ -1,5 +1,7 @@
 create database if not exists testdb;
 
+use testdb;
+
 create table if not exists customer
 (
     cusID varchar(10) not null
