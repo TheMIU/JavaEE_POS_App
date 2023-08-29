@@ -396,9 +396,9 @@ function placeOrder() {
         'total': total.toString()
     };
 
-    console.log(order)
+    console.log(order);
 
-    // send order object to save in server
+    //  send order object to save in server
     $.ajax({
         url: 'http://localhost:8080/app/pages/purchase-order',
         method: 'POST',

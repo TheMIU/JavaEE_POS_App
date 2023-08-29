@@ -1,20 +1,19 @@
 package lk.ijse.jsp.servlet;
 
-import lk.ijse.jsp.servlet.util.DBConnection;
-
 import javax.json.*;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 @WebServlet(urlPatterns = {"/pages/purchase-order"})
 public class PurchaseOrderServletAPI extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.addHeader("Content-Type", "application/json");
@@ -53,7 +52,8 @@ public class PurchaseOrderServletAPI extends HttpServlet {
 
         // transaction
         try {
-            Connection connection = DBConnection.getDBConnection().getConnection();
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/testdb?useSSL=false", "root", "1234");
             connection.setAutoCommit(false);
 
             PreparedStatement pstm2 = connection.prepareStatement("insert into orders (orderID, date, customerID, discount, total)\n" +

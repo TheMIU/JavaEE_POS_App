@@ -1,7 +1,5 @@
 package lk.ijse.jsp.servlet;
 
-import lk.ijse.jsp.servlet.util.DBConnection;
-
 import javax.json.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +16,9 @@ public class ItemServletAPI extends HttpServlet {
         try {
             resp.addHeader("Access-Control-Allow-Origin", "*");
 
-            Connection connection = DBConnection.getDBConnection().getConnection();
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/testdb?useSSL=false", "root", "1234");
+
             PreparedStatement pstm = connection.prepareStatement("select * from Item");
             ResultSet rst = pstm.executeQuery();
 
@@ -59,9 +59,10 @@ public class ItemServletAPI extends HttpServlet {
         resp.addHeader("Content-Type", "application/json");
         resp.addHeader("Access-Control-Allow-Origin", "*");
         try {
-            Connection connection = DBConnection.getDBConnection().getConnection();
-            PreparedStatement pstm = connection.prepareStatement("insert into Item values(?,?,?,?)");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/testdb?useSSL=false", "root", "1234");
 
+            PreparedStatement pstm = connection.prepareStatement("insert into Item values(?,?,?,?)");
             pstm.setObject(1, code);
             pstm.setObject(2, itemName);
             pstm.setObject(3, qty);
@@ -98,9 +99,10 @@ public class ItemServletAPI extends HttpServlet {
         resp.addHeader("Content-Type", "application/json");
         resp.addHeader("Access-Control-Allow-Origin", "*");
         try {
-            Connection connection = DBConnection.getDBConnection().getConnection();
-            PreparedStatement pstm3 = connection.prepareStatement("update Item set itemName=?,qty=?,unitPrice=? where code=?");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/testdb?useSSL=false", "root", "1234");
 
+            PreparedStatement pstm3 = connection.prepareStatement("update Item set itemName=?,qty=?,unitPrice=? where code=?");
             pstm3.setObject(1, itemName);
             pstm3.setObject(2, qty);
             pstm3.setObject(3, unitPrice);
@@ -130,8 +132,10 @@ public class ItemServletAPI extends HttpServlet {
         resp.addHeader("Content-type", "application/json");
         resp.addHeader("Access-Control-Allow-Origin", "*");
 
-        try{
-            Connection connection = DBConnection.getDBConnection().getConnection();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/testdb?useSSL=false", "root", "1234");
+
             PreparedStatement pstm = connection.prepareStatement("delete from Item where code=?");
             pstm.setObject(1, code);
             resp.addHeader("Content-Type", "application/json");
