@@ -241,6 +241,10 @@ $('#addToCart').click(function () {
     // clear qty and total
     $('#txtQty').val("");
     $('#TotalOfItem').val("");
+    $('#selectItemCode').val("");
+    $('#txtItemName').val("");
+    $('#txtItemPrice').val("");
+    $('#txtQTYOnHand').val("");
 
     isValidOrderItemQty = false;
 
