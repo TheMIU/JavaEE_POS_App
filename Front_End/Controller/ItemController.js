@@ -39,7 +39,7 @@ function bindRowClickEvents() {
         let code = $(this).find('td:eq(0)').text();
         let name = $(this).find('td:eq(1)').text();
         let qtyOnHand = $(this).find('td:eq(2)').text();
-        let unitPrice = $(this).find('td:eq(2)').text();
+        let unitPrice = $(this).find('td:eq(3)').text();
 
         setTextFields(code, name, qtyOnHand, unitPrice);
     });

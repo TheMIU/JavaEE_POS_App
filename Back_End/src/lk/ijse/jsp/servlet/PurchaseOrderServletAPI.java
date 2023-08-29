@@ -56,15 +56,15 @@ public class PurchaseOrderServletAPI extends HttpServlet {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/testdb?useSSL=false", "root", "1234");
             connection.setAutoCommit(false);
 
-            PreparedStatement pstm2 = connection.prepareStatement("insert into orders (orderID, date, customerID, discount, total)\n" +
+            PreparedStatement pstm1 = connection.prepareStatement("insert into orders (orderID, date, customerID, discount, total)\n" +
                     "values (?,?,?,?,?);");
-            pstm2.setObject(1, orderID);
-            pstm2.setObject(2, date);
-            pstm2.setObject(3, customerID);
-            pstm2.setObject(4, discount);
-            pstm2.setObject(5, total);
+            pstm1.setObject(1, orderID);
+            pstm1.setObject(2, date);
+            pstm1.setObject(3, customerID);
+            pstm1.setObject(4, discount);
+            pstm1.setObject(5, total);
 
-            if (pstm2.executeUpdate() > 0) {
+            if (pstm1.executeUpdate() > 0) {
                 // Insert items from the cart
                 for (JsonValue cartItemValue : cart) {
                     JsonObject cartItem = (JsonObject) cartItemValue;
@@ -73,13 +73,19 @@ public class PurchaseOrderServletAPI extends HttpServlet {
                     itemCode = item.getString("code");
                     qty = item.getInt("qty");
 
-                    PreparedStatement pstm = connection.prepareStatement("insert into order_items (orderID, itemID, qty)\n" +
+                    PreparedStatement pstm2 = connection.prepareStatement("insert into order_items (orderID, itemID, qty)\n" +
                             "values (?,?,?);");
-                    pstm.setObject(1, orderID);
-                    pstm.setObject(2, itemCode);
-                    pstm.setObject(3, String.valueOf(qty));
+                    pstm2.setObject(1, orderID);
+                    pstm2.setObject(2, itemCode);
+                    pstm2.setObject(3, String.valueOf(qty));
 
-                    pstm.executeUpdate();
+                    pstm2.executeUpdate();
+
+                    // Update item counts in the item table
+                    PreparedStatement pstm3 = connection.prepareStatement("update item set qty = qty - ? where code = ?");
+                    pstm3.setInt(1, qty);
+                    pstm3.setString(2, itemCode);
+                    pstm3.executeUpdate();
                 }
 
                 connection.commit();
