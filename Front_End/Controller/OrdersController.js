@@ -36,3 +36,25 @@ function getAllOrders() {
         }
     });
 }
+
+// search orders
+$("#btnSearch").click(function () {
+    let isFound = false;
+    var searchText = $("#searchText").val().trim().toLowerCase();
+    if (searchText !== "") {
+        $("#tblOrders tr").hide();
+        $("#tblOrders tr").each(function () {
+            var orderId = $(this).find("td:eq(0)").text().trim().toLowerCase();
+            if (orderId === searchText) {
+                $(this).show();
+                isFound = true;
+            }
+        });
+    }
+
+    if (!isFound) {
+        alert("Not found! check ID again");
+        $("#tblOrders tr").show();
+        $("#searchText").val("");
+    }
+});
